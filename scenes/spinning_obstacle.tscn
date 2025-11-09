@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://kucurh7sotvd"]
+
+[ext_resource type="Script" uid="uid://x5lqveshk3h5" path="res://scripts/spinning_obstacle.gd" id="1_2s170"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2s170"]
+friction = 0.0
+bounce = 0.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8cj0n"]
+height = 40.0
+radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uwrxv"]
+albedo_color = Color(1, 0.62352943, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uwrxv"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 40.0
+radial_segments = 8
+
+[node name="SpinningObstacle" type="RigidBody3D"]
+axis_lock_linear_x = true
+axis_lock_linear_y = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 200.0
+physics_material_override = SubResource("PhysicsMaterial_2s170")
+gravity_scale = 0.0
+can_sleep = false
+constant_torque = Vector3(0, 8000, 0)
+script = ExtResource("1_2s170")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_8cj0n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_uwrxv")
+mesh = SubResource("CylinderMesh_uwrxv")
