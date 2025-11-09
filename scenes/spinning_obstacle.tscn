@@ -29,6 +29,7 @@ mass = 200.0
 physics_material_override = SubResource("PhysicsMaterial_2s170")
 gravity_scale = 0.0
 can_sleep = false
+freeze = true
 constant_torque = Vector3(0, 8000, 0)
 script = ExtResource("1_2s170")
 
