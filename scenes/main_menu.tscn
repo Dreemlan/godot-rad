@@ -34,6 +34,11 @@ offset_bottom = 33.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Username"
+alignment = 1
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 

@@ -10,13 +10,23 @@ var hover_damping: float = 10.0
 @onready var floor_ray: RayCast3D = %FloorRay
 
 # Move
-var move_speed: float = 20.0
+var move_speed: float = 100.0
 
 # Jump
 var jump_impulse: float = 20.0
 
 func _ready() -> void:
+	if multiplayer.is_server(): return
 	%Input.set_multiplayer_authority(int(self.name))
+
+func _physics_process(_delta: float) -> void:
+	if multiplayer.is_server():
+		var server_transforms: Dictionary = {
+			"pos": global_position
+		}
+		client_receive_transforms.rpc(server_transforms)
+	elif is_multiplayer_authority():
+		pass
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_hover(state)
@@ -38,3 +48,7 @@ func is_on_floor() -> bool:
 		return false
 	else:
 		return true
+
+@rpc("authority")
+func client_receive_transforms(server_transforms: Dictionary) -> void:
+	global_position = server_transforms["pos"]

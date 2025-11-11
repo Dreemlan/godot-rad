@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://5h2twfl5cmak"]
+[gd_scene load_steps=7 format=3 uid="uid://5h2twfl5cmak"]
 
 [ext_resource type="Script" uid="uid://bhqol1exam42n" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/input.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/mesh.gd" id="3_qhqgy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3vyb7"]
 friction = 0.0
@@ -22,9 +23,6 @@ script = ExtResource("1_3vyb7")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_u8vuu")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_3vyb7")
-
 [node name="HoverRay" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 target_position = Vector3(0, -9, 0)
@@ -36,3 +34,10 @@ target_position = Vector3(0, -2, 0)
 [node name="Input" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_g2els")
+
+[node name="Mesh" type="Node3D" parent="."]
+script = ExtResource("3_qhqgy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
+mesh = SubResource("CapsuleMesh_3vyb7")
+skeleton = NodePath("../..")

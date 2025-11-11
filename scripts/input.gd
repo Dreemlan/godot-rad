@@ -1,18 +1,37 @@
+# Client authority
 extends Node
 
 @onready var body = get_parent() as RigidBody3D
 
-func _physics_process(_delta: float) -> void:
-	if not is_multiplayer_authority(): return
-	
-	_move()
-	_jump()
+var input_dir: Vector2 = Vector2.ZERO
 
-func _move() -> void:
-	var input_dir = Input.get_vector("left", "right", "up", "down").normalized()
+func _physics_process(_delta: float) -> void:
+	_handle_movement()
+	_handle_jump()
+
+func _handle_movement() -> void:
+	if multiplayer.is_server():
+		_apply_movement()
+	elif is_multiplayer_authority():
+		input_dir = Input.get_vector("left", "right", "up", "down").normalized()
+		server_receive_move.rpc_id(1, input_dir)
+		#_apply_movement()
+
+func _apply_movement() -> void:
 	var move_dir = Vector3(input_dir.x, 0, input_dir.y)
 	body.apply_central_force(move_dir * body.move_speed * body.mass)
 
-func _jump() -> void:
+func _handle_jump() -> void:
+	if not is_multiplayer_authority(): return
 	if Input.is_action_just_pressed("jump") && body.is_on_floor():
+		server_receive_jump.rpc_id(1)
+		body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
+
+@rpc("any_peer")
+func server_receive_move(client_input: Vector2) -> void:
+	input_dir = client_input
+
+@rpc("any_peer")
+func server_receive_jump() -> void:
+	if body.is_on_floor():
 		body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
