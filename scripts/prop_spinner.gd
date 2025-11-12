@@ -10,7 +10,7 @@ func _physics_process(_delta: float) -> void:
 		var server_transforms: Dictionary = {
 			"rot": global_rotation
 		}
-		client_receive_transforms.rpc(server_transforms)
+		#client_receive_transforms.rpc(server_transforms)
 
 @rpc("authority")
 func client_receive_transforms(server_transforms: Dictionary) -> void:

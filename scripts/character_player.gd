@@ -16,15 +16,17 @@ var move_speed: float = 100.0
 var jump_impulse: float = 20.0
 
 func _ready() -> void:
+	print("Player spawned")
+	
 	if multiplayer.is_server(): return
-	%Input.set_multiplayer_authority(int(self.name))
+	%Controller.set_multiplayer_authority(int(self.name))
 
 func _physics_process(_delta: float) -> void:
 	if multiplayer.is_server():
 		var server_transforms: Dictionary = {
 			"pos": global_position
 		}
-		client_receive_transforms.rpc(server_transforms)
+		#client_receive_transforms.rpc(server_transforms)
 	elif is_multiplayer_authority():
 		pass
 

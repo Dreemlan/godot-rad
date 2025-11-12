@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://barjvoxmpbx0m" path="res://scripts/game_camera.gd" id="1_bhu28"]
 [ext_resource type="Texture2D" uid="uid://clv2ymuqx5b2b" path="res://assets/sky_44_2k/sky_44_2k.png" id="2_4p75b"]
-[ext_resource type="PackedScene" uid="uid://c80dlgghe12u8" path="res://scenes/wall.tscn" id="3_y8ti4"]
-[ext_resource type="PackedScene" uid="uid://kucurh7sotvd" path="res://scenes/spinning_obstacle.tscn" id="4_astit"]
-[ext_resource type="Script" uid="uid://b1espewfxewd5" path="res://scripts/player_spawn_points.gd" id="5_o5wbv"]
-[ext_resource type="Script" uid="uid://hasquroxqdxa" path="res://scripts/killzone.gd" id="6_s6ikc"]
+[ext_resource type="PackedScene" uid="uid://c80dlgghe12u8" path="res://scenes/prop_wall.tscn" id="3_y8ti4"]
+[ext_resource type="PackedScene" uid="uid://kucurh7sotvd" path="res://scenes/prop_spinner.tscn" id="4_astit"]
+[ext_resource type="Script" uid="uid://b1espewfxewd5" path="res://scripts/level_spawnpoints.gd" id="5_o5wbv"]
+[ext_resource type="Script" uid="uid://hasquroxqdxa" path="res://scripts/prop_killzone.gd" id="6_s6ikc"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gee14"]
 panorama = ExtResource("2_4p75b")

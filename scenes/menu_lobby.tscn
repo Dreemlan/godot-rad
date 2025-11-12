@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://wmgmxeoc70em"]
 
-[ext_resource type="Script" uid="uid://5duf5e26gv3e" path="res://scripts/level_select_menu.gd" id="1_wyt36"]
-[ext_resource type="PackedScene" uid="uid://p8v61g6iagyl" path="res://scenes/hud_player_status.tscn" id="2_cxc3u"]
+[ext_resource type="Script" uid="uid://5duf5e26gv3e" path="res://scripts/menu_lobby.gd" id="1_wyt36"]
+[ext_resource type="PackedScene" uid="uid://p8v61g6iagyl" path="res://scenes/hud_lobby_player_status.tscn" id="2_cxc3u"]
 
 [node name="LevelSelectMenu" type="Control"]
 layout_mode = 3
@@ -81,7 +81,10 @@ layout_mode = 2
 [node name="HUDPlayerStatus6" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
 layout_mode = 2
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="."]
+[node name="Spectate" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 23.0
+text = "Spectating game in progress..."

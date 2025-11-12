@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://kucurh7sotvd"]
 
-[ext_resource type="Script" uid="uid://x5lqveshk3h5" path="res://scripts/spinning_obstacle.gd" id="1_2s170"]
-[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/mesh.gd" id="2_bib0d"]
+[ext_resource type="Script" uid="uid://x5lqveshk3h5" path="res://scripts/prop_spinner.gd" id="1_2s170"]
+[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="2_bib0d"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2s170"]
 friction = 0.0

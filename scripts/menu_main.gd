@@ -1,6 +1,8 @@
 extends Control
 
 func _ready() -> void:
+	print("[Menu:Main] ready")
+	
 	%DedicatedServer.pressed.connect(_on_dedicated_server)
 	%Host.pressed.connect(_on_host)
 	%Join.pressed.connect(_on_join)
@@ -10,7 +12,6 @@ func _ready() -> void:
 
 func _on_dedicated_server() -> void:
 	NetworkManager.create_server()
-	hide()
 
 func _on_host() -> void:
 	NetworkManager.create_server()
@@ -19,13 +20,9 @@ func _on_host() -> void:
 		%DisplayName.text = %DisplayName.placeholder_text
 	
 	PlayerManager.add_player(1, %DisplayName.text)
-	
-	%LevelSelectMenu.setup_player.rpc_id(1,
-		multiplayer.get_unique_id(),
-		PlayerManager.players[multiplayer.get_unique_id()]["display_name"])
-	
-	hide()
-	%LevelSelectMenu.show()
+
+	#hide()
+	#%LevelSelectMenu.show()
 
 func _on_join() -> void:
 	if %IPAddress.text == "":
@@ -38,8 +35,10 @@ func _on_join() -> void:
 func _on_connected_to_server() -> void:
 	if %DisplayName.text == "":
 		%DisplayName.text = %DisplayName.placeholder_text
-	NetworkManager.peer_login_request.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
-	
+	NetworkManager.peer_login.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
+
+
+func progress_to_lobby() -> void:
 	hide()
 	%LevelSelectMenu.setup_player.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
 	%LevelSelectMenu.show()

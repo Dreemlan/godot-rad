@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://5h2twfl5cmak"]
 
-[ext_resource type="Script" uid="uid://bhqol1exam42n" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/input.gd" id="2_g2els"]
-[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/mesh.gd" id="3_qhqgy"]
+[ext_resource type="Script" uid="uid://bhqol1exam42n" path="res://scripts/character_player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/character_player_controller.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="3_qhqgy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3vyb7"]
 friction = 0.0
@@ -31,7 +31,7 @@ target_position = Vector3(0, -9, 0)
 unique_name_in_owner = true
 target_position = Vector3(0, -2, 0)
 
-[node name="Input" type="Node" parent="."]
+[node name="Controller" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_g2els")
 

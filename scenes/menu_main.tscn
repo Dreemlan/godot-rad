@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://t4j5kau1g2k5"]
 
-[ext_resource type="Script" uid="uid://bvclqyf8ydp2h" path="res://scripts/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://bvclqyf8ydp2h" path="res://scripts/menu_main.gd" id="1_l6cm7"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -28,9 +28,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -112.5
-offset_top = -33.0
+offset_top = -68.0
 offset_right = 112.5
-offset_bottom = 33.0
+offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 

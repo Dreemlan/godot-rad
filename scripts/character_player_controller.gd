@@ -5,6 +5,9 @@ extends Node
 
 var input_dir: Vector2 = Vector2.ZERO
 
+func _ready() -> void:
+	print("Character player controller initialized")
+
 func _physics_process(_delta: float) -> void:
 	_handle_movement()
 	_handle_jump()
@@ -12,9 +15,10 @@ func _physics_process(_delta: float) -> void:
 func _handle_movement() -> void:
 	if multiplayer.is_server():
 		_apply_movement()
-	elif is_multiplayer_authority():
+	if is_multiplayer_authority():
 		input_dir = Input.get_vector("left", "right", "up", "down").normalized()
-		server_receive_move.rpc_id(1, input_dir)
+		if not multiplayer.is_server():
+			server_receive_move.rpc_id(1, input_dir)
 		#_apply_movement()
 
 func _apply_movement() -> void:
@@ -22,10 +26,13 @@ func _apply_movement() -> void:
 	body.apply_central_force(move_dir * body.move_speed * body.mass)
 
 func _handle_jump() -> void:
-	if not is_multiplayer_authority(): return
-	if Input.is_action_just_pressed("jump") && body.is_on_floor():
-		server_receive_jump.rpc_id(1)
-		body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
+	if multiplayer.is_server():
+		pass
+	if is_multiplayer_authority():
+		if Input.is_action_just_pressed("jump") && body.is_on_floor():
+			body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
+		if not multiplayer.is_server():
+			server_receive_jump.rpc_id(1)
 
 @rpc("any_peer")
 func server_receive_move(client_input: Vector2) -> void:

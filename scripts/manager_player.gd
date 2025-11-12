@@ -1,8 +1,13 @@
 extends Node
 
 # Player
-const PLAYER = preload("res://scenes/player.tscn")
+const PLAYER = preload("res://scenes/character_player.tscn")
 var players: Dictionary[int, Dictionary] = {}
+
+var spawn_points = null
+
+func _ready() -> void:
+	print("[Manager:Player] ready")
 
 @rpc("any_peer", "call_local", "reliable")
 func add_player(id: int, display_name: String) -> void:
@@ -13,12 +18,16 @@ func add_player(id: int, display_name: String) -> void:
 		for player in PlayerManager.players:
 			add_player.rpc_id(id, player, players[multiplayer.get_unique_id()]["display_name"])
 		add_player.rpc(id, display_name)
+	
+	print("%s added player %s" % [multiplayer.get_unique_id(), id])
+	MenuManager.load_menu(MenuManager.LOBBY)
 
 @rpc("any_peer", "call_local", "reliable")
 func remove_player(id: int) -> void:
 	ScoreManager.remove_player_score(id)
 	despawn_player(id)
 
+@rpc("authority", "call_local", "reliable")
 func spawn_player(id: int) -> void:
 	print("%s is spawning: %s" % [multiplayer.get_unique_id(), id])
 	if has_node(str(id)): return
@@ -30,6 +39,11 @@ func despawn_player(id: int) -> void:
 	players.erase(id)
 	if not has_node(str(id)): return
 	get_node(str(id)).call_deferred("queue_free")
+
+func spawn_all_players() -> void:
+	if multiplayer.is_server():
+		for id in players:
+			spawn_player.rpc(id)
 
 @rpc("any_peer", "reliable")
 func get_server_display_name() -> String:
