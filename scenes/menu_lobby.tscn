@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://5duf5e26gv3e" path="res://scripts/menu_lobby.gd" id="1_wyt36"]
 [ext_resource type="PackedScene" uid="uid://p8v61g6iagyl" path="res://scenes/hud_lobby_player_status.tscn" id="2_cxc3u"]
 
-[node name="LevelSelectMenu" type="Control"]
+[node name="MenuLobby" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

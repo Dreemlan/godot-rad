@@ -7,7 +7,7 @@ var players: Dictionary[int, Dictionary] = {}
 var spawn_points = null
 
 func _ready() -> void:
-	print("[Manager:Player] ready")
+	Helper.log(self, "Ready")
 
 @rpc("any_peer", "call_local", "reliable")
 func add_player(id: int, display_name: String) -> void:
@@ -18,9 +18,10 @@ func add_player(id: int, display_name: String) -> void:
 		for player in PlayerManager.players:
 			add_player.rpc_id(id, player, players[multiplayer.get_unique_id()]["display_name"])
 		add_player.rpc(id, display_name)
+	if id == multiplayer.get_unique_id():
+		MenuManager.load_menu(MenuManager.LOBBY)
 	
-	print("%s added player %s" % [multiplayer.get_unique_id(), id])
-	MenuManager.load_menu(MenuManager.LOBBY)
+	Helper.log(self, "Registered 'Player' %s to 'Dictionary'" % [id])
 
 @rpc("any_peer", "call_local", "reliable")
 func remove_player(id: int) -> void:
@@ -29,11 +30,11 @@ func remove_player(id: int) -> void:
 
 @rpc("authority", "call_local", "reliable")
 func spawn_player(id: int) -> void:
-	print("%s is spawning: %s" % [multiplayer.get_unique_id(), id])
 	if has_node(str(id)): return
 	var inst = PLAYER.instantiate()
 	inst.name = str(id)
 	add_child(inst)
+	Helper.log(self, "Added 'Player' %s to scene tree" % id)
 
 func despawn_player(id: int) -> void:
 	players.erase(id)
@@ -46,6 +47,5 @@ func spawn_all_players() -> void:
 			spawn_player.rpc(id)
 
 @rpc("any_peer", "reliable")
-func get_server_display_name() -> String:
-	var id = multiplayer.get_remote_sender_id()
-	return players[id]["display_name"] as String
+func confirm_player_spawn() -> void:
+	pass

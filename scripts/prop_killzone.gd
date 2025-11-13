@@ -2,7 +2,7 @@ extends Area3D
 
 var eliminated: Array = []
 
-signal all_eliminated
+#signal all_eliminated
 
 func _ready() -> void:
 	if multiplayer.is_server():

@@ -3,10 +3,10 @@ extends Control
 var gui_player_ready = []
 var ready_statuses: Dictionary[int, bool] = {}
 
-signal level_selected(level_basename: String)
+#signal level_selected(level_basename: String)
 
 func _ready() -> void:
-	print("[Menu:Lobby] ready")
+	Helper.log(self, "Ready")
 	_ready_cleanup()
 	
 	setup_player.rpc_id(1,
@@ -15,8 +15,13 @@ func _ready() -> void:
 	
 	%LevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if Input.is_action_just_pressed("esc"):
+			#queue_free()
+			MenuManager.quit_to_main(self)
+
 func _ready_cleanup() -> void:
-	print("Removed test ready statuses")
 	for child in %PlayerContainer.get_children():
 		child.queue_free()
 
@@ -51,7 +56,7 @@ func setup_player(id: int, display_name: String) -> void:
 			setup_player.rpc_id(id, player, PlayerManager.players[player]["display_name"])
 		setup_player.rpc(id, display_name)
 	
-	print("%s setup GUI for player ready status: %s" % [multiplayer.get_unique_id(), id])
+	Helper.log(self, "Added 'GUI Ready Status' for 'Player' %s to scene tree" % [id])
 
 func remove_player(id: int) -> void:
 	gui_player_ready.erase(id)
@@ -61,7 +66,6 @@ func _on_level_one_select(level_basename: String) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if _all_ready(): 
-		print("Loading level: %s" % level_basename)
 		LevelManager.load_level(level_basename)
 		MenuManager.hide_active_menu.rpc()
 	else:

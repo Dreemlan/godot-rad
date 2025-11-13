@@ -3,7 +3,7 @@ extends Node
 var level_in_progress: bool = false
 
 func _ready() -> void:
-	print("[Manager:Level] ready")
+	Helper.log(self, "Ready")
 
 @rpc("authority", "call_local", "reliable")
 func load_level(level_basename: String) -> void:
@@ -13,4 +13,4 @@ func load_level(level_basename: String) -> void:
 	var level_inst = load("res://scenes/%s.tscn" % level_basename).instantiate()
 	add_child(level_inst)
 	level_in_progress = true
-	print("%s added level to scene tree" % multiplayer.get_unique_id())
+	Helper.log(self, "Added level to scene tree")

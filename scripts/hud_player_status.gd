@@ -5,7 +5,6 @@ var is_ready: bool = false
 signal ready_status_changed(status: bool)
 
 func _ready() -> void:
-	print("HUD player ready status initialized")
 	%ReadyButton.toggled.connect(_on_toggle)
 
 func _input(_event: InputEvent) -> void:

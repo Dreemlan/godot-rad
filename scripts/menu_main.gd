@@ -1,7 +1,7 @@
 extends Control
 
 func _ready() -> void:
-	print("[Menu:Main] ready")
+	Helper.log(self, "Ready")
 	
 	%DedicatedServer.pressed.connect(_on_dedicated_server)
 	%Host.pressed.connect(_on_host)
@@ -22,7 +22,7 @@ func _on_host() -> void:
 	PlayerManager.add_player(1, %DisplayName.text)
 
 	#hide()
-	#%LevelSelectMenu.show()
+	#%MenuLobby.show()
 
 func _on_join() -> void:
 	if %IPAddress.text == "":
@@ -40,13 +40,13 @@ func _on_connected_to_server() -> void:
 
 func progress_to_lobby() -> void:
 	hide()
-	%LevelSelectMenu.setup_player.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
-	%LevelSelectMenu.show()
+	%MenuLobby.setup_player.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
+	%MenuLobby.show()
 
 func peer_login_approved() -> void:
 	hide()
-	%LevelSelectMenu.setup_player.rpc_id(1, multiplayer.get_unique_id())
-	%LevelSelectMenu.show()
+	%MenuLobby.setup_player.rpc_id(1, multiplayer.get_unique_id())
+	%MenuLobby.show()
 
 func _on_peer_disconnect(id: int) -> void:
-	%LevelSelectMenu.remove_player(id)
+	%MenuLobby.remove_player(id)

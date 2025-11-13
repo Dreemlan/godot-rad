@@ -6,7 +6,7 @@ extends Node
 var input_dir: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	print("Character player controller initialized")
+	Helper.log(self, "Ready")
 
 func _physics_process(_delta: float) -> void:
 	_handle_movement()

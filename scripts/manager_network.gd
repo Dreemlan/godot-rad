@@ -6,18 +6,25 @@ const MAX_CLIENTS: int = 8
 var game_in_progress: bool = false
 
 func _ready() -> void:
-	print("[Manager:Network] ready")
+	Helper.log(self, "Ready")
 
 func create_server() -> void:
-	print("Server started")
+	Helper.log(self, "Server started")
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(PORT, MAX_CLIENTS)
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
+func shutdown_server() -> void:
+	for peer in multiplayer.get_peers():
+		multiplayer.multiplayer_peer.disconnect_peer(peer, true)
+	multiplayer.peer_disconnected.disconnect(_on_peer_disconnected)
+	multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null
+
 @rpc("any_peer", "call_local", "reliable")
 func peer_login(id: int, display_name: String) -> void:
-	print("%s requesting login to server" % id)
+	Helper.log(self, "Requesting login to server...")
 	PlayerManager.add_player.rpc(id, display_name)
 	
 	if multiplayer.is_server(): # Handshake with client
@@ -28,7 +35,7 @@ func _on_peer_disconnected(id: int) -> void:
 	PlayerManager.remove_player(id)
 
 func create_client(ip_address: String) -> void:
-	print("Client started")
+	Helper.log(self, "Client started")
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_client(ip_address, PORT)
 	multiplayer.multiplayer_peer = peer

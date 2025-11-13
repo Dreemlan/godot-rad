@@ -3,7 +3,7 @@ extends Camera3D
 @export var focus: Node
 
 func _ready() -> void:
-	print("Game camera initialized")
+	Helper.log(self, "Added to scene tree")
 
 func _process(delta: float) -> void:
 	if focus == null: return

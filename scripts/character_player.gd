@@ -1,5 +1,7 @@
 extends RigidBody3D
 
+var rpc_enabled: bool = false
+
 # Hover
 @onready var hover_ray: RayCast3D = %HoverRay
 var hover_height: float = 1.5
@@ -16,19 +18,21 @@ var move_speed: float = 100.0
 var jump_impulse: float = 20.0
 
 func _ready() -> void:
-	print("Player spawned")
+	Helper.log(self, "Ready")
 	
-	if multiplayer.is_server(): return
-	%Controller.set_multiplayer_authority(int(self.name))
+	if multiplayer.is_server():
+		pass
+	else:
+		enable_rpc.rpc_id(1, true)
+		%Controller.set_multiplayer_authority(int(self.name))
 
 func _physics_process(_delta: float) -> void:
 	if multiplayer.is_server():
 		var server_transforms: Dictionary = {
 			"pos": global_position
 		}
-		#client_receive_transforms.rpc(server_transforms)
-	elif is_multiplayer_authority():
-		pass
+		if not rpc_enabled: return
+		client_receive_transforms.rpc(server_transforms)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_hover(state)
@@ -50,6 +54,11 @@ func is_on_floor() -> bool:
 		return false
 	else:
 		return true
+
+@rpc("any_peer", "reliable")
+func enable_rpc(state: bool) -> void:
+	Helper.log(self, "Enable RPC")
+	rpc_enabled = state
 
 @rpc("authority")
 func client_receive_transforms(server_transforms: Dictionary) -> void:

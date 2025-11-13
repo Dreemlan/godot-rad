@@ -3,7 +3,7 @@ extends Node
 var spawn_points: Dictionary = {}
 
 func _ready() -> void:
-	print("Player spawn points initialized, spawning players...")
+	Helper.log(self, "Spawn points ready")
 	
 	# Set all spots to free
 	for i in get_child_count():
