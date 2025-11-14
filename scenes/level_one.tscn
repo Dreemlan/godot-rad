@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1ejeyiat2coi"]
+[gd_scene load_steps=15 format=3 uid="uid://b1ejeyiat2coi"]
 
+[ext_resource type="Script" uid="uid://dadliqpmffxe6" path="res://scripts/level_one.gd" id="1_4p75b"]
 [ext_resource type="Script" uid="uid://barjvoxmpbx0m" path="res://scripts/game_camera.gd" id="1_bhu28"]
 [ext_resource type="Texture2D" uid="uid://clv2ymuqx5b2b" path="res://assets/sky_44_2k/sky_44_2k.png" id="2_4p75b"]
 [ext_resource type="PackedScene" uid="uid://c80dlgghe12u8" path="res://scenes/prop_wall.tscn" id="3_y8ti4"]
@@ -36,6 +37,7 @@ rings = 1
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_p57ef"]
 
 [node name="LevelOne" type="Node"]
+script = ExtResource("1_4p75b")
 
 [node name="GameCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8, 13)

@@ -49,3 +49,8 @@ func spawn_all_players() -> void:
 @rpc("any_peer", "reliable")
 func confirm_player_spawn() -> void:
 	pass
+
+func clear_players() -> void:
+	players = {}
+	for player in get_children():
+		player.queue_free()

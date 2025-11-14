@@ -18,11 +18,11 @@ config/icon="res://icon.svg"
 [autoload]
 
 Helper="*res://scripts/helper.gd"
+MenuManager="*res://scripts/manager_menu.gd"
 NetworkManager="*res://scripts/manager_network.gd"
 PlayerManager="*res://scripts/manager_player.gd"
 LevelManager="*res://scripts/manager_level.gd"
 ScoreManager="*res://scripts/manager_score.gd"
-MenuManager="*res://scripts/manager_menu.gd"
 
 [display]
 

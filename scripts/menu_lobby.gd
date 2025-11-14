@@ -3,8 +3,6 @@ extends Control
 var gui_player_ready = []
 var ready_statuses: Dictionary[int, bool] = {}
 
-#signal level_selected(level_basename: String)
-
 func _ready() -> void:
 	Helper.log(self, "Ready")
 	_ready_cleanup()
@@ -16,9 +14,10 @@ func _ready() -> void:
 	%LevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
 
 func _input(event: InputEvent) -> void:
+	if MenuManager.is_ingame: return
+	if not MenuManager.active_menu_node == self: return
 	if event is InputEventKey:
 		if Input.is_action_just_pressed("esc"):
-			#queue_free()
 			MenuManager.quit_to_main(self)
 
 func _ready_cleanup() -> void:
@@ -65,7 +64,8 @@ func remove_player(id: int) -> void:
 func _on_level_one_select(level_basename: String) -> void:
 	if not is_multiplayer_authority(): return
 	
-	if _all_ready(): 
+	if _all_ready():
+		MenuManager.is_ingame = true
 		LevelManager.load_level(level_basename)
 		MenuManager.hide_active_menu.rpc()
 	else:

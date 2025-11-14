@@ -21,9 +21,6 @@ func _on_host() -> void:
 	
 	PlayerManager.add_player(1, %DisplayName.text)
 
-	#hide()
-	#%MenuLobby.show()
-
 func _on_join() -> void:
 	if %IPAddress.text == "":
 		%IPAddress.text = %IPAddress.placeholder_text
@@ -37,7 +34,6 @@ func _on_connected_to_server() -> void:
 		%DisplayName.text = %DisplayName.placeholder_text
 	NetworkManager.peer_login.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
 
-
 func progress_to_lobby() -> void:
 	hide()
 	%MenuLobby.setup_player.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
@@ -49,4 +45,5 @@ func peer_login_approved() -> void:
 	%MenuLobby.show()
 
 func _on_peer_disconnect(id: int) -> void:
+	if not %MenuLobby: return
 	%MenuLobby.remove_player(id)

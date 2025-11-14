@@ -14,3 +14,7 @@ func load_level(level_basename: String) -> void:
 	add_child(level_inst)
 	level_in_progress = true
 	Helper.log(self, "Added level to scene tree")
+
+func clear_level() -> void:
+	for level in get_children():
+		level.queue_free()
