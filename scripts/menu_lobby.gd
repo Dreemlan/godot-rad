@@ -11,14 +11,16 @@ func _ready() -> void:
 		multiplayer.get_unique_id(),
 		PlayerManager.players[multiplayer.get_unique_id()]["display_name"])
 	
-	%LevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
+	if NetworkManager.is_server():
+		%LevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
+		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 func _input(event: InputEvent) -> void:
 	if MenuManager.is_ingame: return
 	if not MenuManager.active_menu_node == self: return
 	if event is InputEventKey:
 		if Input.is_action_just_pressed("esc"):
-			MenuManager.quit_to_main(self)
+			MenuManager.quit_to_main()
 
 func _ready_cleanup() -> void:
 	for child in %PlayerContainer.get_children():
@@ -45,6 +47,7 @@ func setup_player(id: int, display_name: String) -> void:
 	ready_statuses.set(id, false)
 	
 	if LevelManager.level_in_progress:
+		Helper.log(self, "Level in progress")
 		%Spectate.show()
 	
 	%PlayerContainer.add_child(player_ready_status)
@@ -66,11 +69,15 @@ func _on_level_one_select(level_basename: String) -> void:
 	
 	if _all_ready():
 		MenuManager.is_ingame = true
-		LevelManager.load_level(level_basename)
 		MenuManager.hide_active_menu.rpc()
+		LevelManager.load_level.rpc(level_basename)
 	else:
 		print("Not all players are ready")
 
 @rpc("authority", "call_local", "reliable")
 func hide_menu() -> void:
 	hide()
+
+func _on_peer_disconnected(id: int) -> void:
+	if %PlayerContainer.has_node(str(id)):
+		%PlayerContainer.get_node(str(id)).queue_free()

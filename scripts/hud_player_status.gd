@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func _input(_event: InputEvent) -> void:
 	if not MenuManager.active_menu_path == MenuManager.LOBBY: return
-	if not is_multiplayer_authority(): return
+	if not NetworkManager.is_authority(): return
 	if Input.is_action_just_pressed("space"):
 		%ReadyButton.button_pressed = not %ReadyButton.button_pressed
 		%ReadyButton.toggled.emit(%ReadyButton.button_pressed)

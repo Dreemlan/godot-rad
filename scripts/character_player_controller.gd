@@ -31,8 +31,8 @@ func _handle_jump() -> void:
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("jump") && body.is_on_floor():
 			body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
-		if not multiplayer.is_server():
-			server_receive_jump.rpc_id(1)
+			if not multiplayer.is_server():
+				server_receive_jump.rpc_id(1)
 
 @rpc("any_peer")
 func server_receive_move(client_input: Vector2) -> void:

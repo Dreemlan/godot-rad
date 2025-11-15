@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="3_qhqgy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3vyb7"]
-friction = 0.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
 height = 1.5

@@ -8,4 +8,4 @@ func _on_settings_pressed() -> void:
 	pass
 
 func _on_quit_to_main_pressed() -> void:
-	MenuManager.quit_to_main(self)
+	MenuManager.quit_to_main()

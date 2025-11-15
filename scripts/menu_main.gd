@@ -44,6 +44,5 @@ func peer_login_approved() -> void:
 	%MenuLobby.setup_player.rpc_id(1, multiplayer.get_unique_id())
 	%MenuLobby.show()
 
-func _on_peer_disconnect(id: int) -> void:
-	if not %MenuLobby: return
-	%MenuLobby.remove_player(id)
+func _on_peer_disconnect(_id: int) -> void:
+	pass

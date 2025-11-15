@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://wmgmxeoc70em"]
+[gd_scene load_steps=2 format=3 uid="uid://wmgmxeoc70em"]
 
 [ext_resource type="Script" uid="uid://5duf5e26gv3e" path="res://scripts/menu_lobby.gd" id="1_wyt36"]
-[ext_resource type="PackedScene" uid="uid://p8v61g6iagyl" path="res://scenes/hud_lobby_player_status.tscn" id="2_cxc3u"]
 
 [node name="MenuLobby" type="Control"]
 layout_mode = 3
@@ -62,24 +61,6 @@ offset_top = -58.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
-
-[node name="HUDPlayerStatus" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
-
-[node name="HUDPlayerStatus2" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
-
-[node name="HUDPlayerStatus3" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
-
-[node name="HUDPlayerStatus4" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
-
-[node name="HUDPlayerStatus5" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
-
-[node name="HUDPlayerStatus6" parent="PlayerContainer" instance=ExtResource("2_cxc3u")]
-layout_mode = 2
 
 [node name="Spectate" type="Label" parent="."]
 unique_name_in_owner = true

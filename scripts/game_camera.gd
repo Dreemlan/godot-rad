@@ -4,6 +4,8 @@ extends Camera3D
 
 func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
+	#await get_tree().process_frame
+	#focus = PlayerManager.get_node(str(multiplayer.get_unique_id()))
 
 func _process(delta: float) -> void:
 	if focus == null: return

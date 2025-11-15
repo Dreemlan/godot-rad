@@ -46,9 +46,9 @@ func spawn_all_players() -> void:
 		for id in players:
 			spawn_player.rpc(id)
 
-@rpc("any_peer", "reliable")
-func confirm_player_spawn() -> void:
-	pass
+#@rpc("any_peer", "reliable")
+#func confirm_player_spawn() -> void:
+	#pass
 
 func clear_players() -> void:
 	players = {}
