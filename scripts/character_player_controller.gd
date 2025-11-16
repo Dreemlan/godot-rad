@@ -5,9 +5,6 @@ extends Node
 
 var input_dir: Vector2 = Vector2.ZERO
 
-func _ready() -> void:
-	Helper.log(self, "Ready")
-
 func _physics_process(_delta: float) -> void:
 	_handle_movement()
 	_handle_jump()

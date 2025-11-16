@@ -8,8 +8,6 @@ const PAUSE = "menu_pause"
 var active_menu_node = null
 var active_menu_path = null
 
-var is_ingame: bool = false
-
 func _ready() -> void:
 	Helper.log(self, "Ready")
 	var main_menu = load("res://scenes/menu_main.tscn").instantiate()
@@ -28,7 +26,6 @@ func load_menu(menu_path: String) -> void:
 		return
 	
 	active_menu_node.queue_free()
-	Helper.log(self, "Add new menu node")
 	var menu_node = load("res://scenes/%s.tscn" % menu_path).instantiate()
 	await get_tree().process_frame
 	add_child(menu_node)
@@ -43,7 +40,7 @@ func quit_to_main() -> void:
 	Helper.log(self, "Quit to main menu")
 	await get_tree().process_frame
 	load_menu(MAIN)
-	if NetworkManager.is_server():
-		NetworkManager.shutdown_server()
+	if ManagerNetwork.is_server():
+		ManagerNetwork.shutdown_server()
 	else:
-		NetworkManager.shutdown_client()
+		ManagerNetwork.shutdown_client()

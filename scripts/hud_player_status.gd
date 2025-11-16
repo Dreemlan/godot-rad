@@ -5,11 +5,12 @@ var is_ready: bool = false
 signal ready_status_changed(status: bool)
 
 func _ready() -> void:
+	Helper.log(self, "Added to scene tree")
 	%ReadyButton.toggled.connect(_on_toggle)
 
 func _input(_event: InputEvent) -> void:
-	if not MenuManager.active_menu_path == MenuManager.LOBBY: return
-	if not NetworkManager.is_authority(): return
+	if not ManagerMenu.active_menu_path == ManagerMenu.LOBBY: return
+	if not ManagerNetwork.is_authority(): return
 	if Input.is_action_just_pressed("space"):
 		%ReadyButton.button_pressed = not %ReadyButton.button_pressed
 		%ReadyButton.toggled.emit(%ReadyButton.button_pressed)
@@ -31,7 +32,7 @@ func set_ready_status(status: bool, id: int) -> void:
 	# Update local variable
 	is_ready = status
 	
-	var display_name = PlayerManager.players[id]["display_name"]
+	var display_name = ManagerPlayer.players[id]["display_name"]
 	set_display_name(display_name)
 	
 	# Update GUI

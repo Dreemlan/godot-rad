@@ -1,20 +1,36 @@
 extends Node
 
-var level_in_progress: bool = false
+var active_level_node: Node = null
+var active_level_basename: String = ""
+var active_level_spawn_points: Dictionary = {}
 
 func _ready() -> void:
 	Helper.log(self, "Ready")
 
 @rpc("authority", "call_local", "reliable")
 func load_level(level_basename: String) -> void:
-	if level_in_progress:
+	ManagerMenu.hide_active_menu()
+	if active_level_node:
 		print("Game is in progress")
 		return
 	var level_inst = load("res://scenes/%s.tscn" % level_basename).instantiate()
 	add_child(level_inst)
-	level_in_progress = true
+	active_level_node = level_inst
+	active_level_basename = level_basename
 	Helper.log(self, "Added level to scene tree")
 
 func clear_level() -> void:
+	active_level_node = null
+	active_level_basename = ""
 	for level in get_children():
 		level.queue_free()
+
+func get_free() -> Vector3:
+	var pos: Vector3 = Vector3.ZERO
+	var sp = active_level_spawn_points
+	for i in sp.size():
+		pos = sp[i]["pos"]
+		if sp[i]["free"] == true:
+			sp[i]["free"] = false
+			return pos
+	return pos
