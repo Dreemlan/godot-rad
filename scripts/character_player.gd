@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 var rpc_enabled: bool = false
+var queued_for_delete: bool = false
 
 # Hover
 @onready var hover_ray: RayCast3D = %HoverRay
@@ -23,8 +24,19 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		pass
 	else:
-		enable_rpc.rpc_id(1, true)
-		%Controller.set_multiplayer_authority(int(self.name))
+		toggle_rpc.rpc_id(1, true)
+		
+	%Controller.set_multiplayer_authority(int(self.name))
+
+func _exit_tree() -> void:
+	Helper.log(self, "Exit tree")
+
+@rpc("any_peer", "call_local", "reliable")
+func queue_deletion() -> void:
+	Helper.log(self, "Queued for deletion")
+	toggle_rpc(false)
+	await get_tree().create_timer(1.0).timeout
+	call_deferred("queue_free")
 
 func _physics_process(_delta: float) -> void:
 	if multiplayer.is_server():
@@ -55,9 +67,9 @@ func is_on_floor() -> bool:
 	else:
 		return true
 
-@rpc("any_peer", "reliable")
-func enable_rpc(state: bool) -> void:
-	Helper.log(self, "Enable RPC")
+@rpc("any_peer", "call_local", "reliable")
+func toggle_rpc(state: bool) -> void:
+	Helper.log(self, "@rpc %s" % state)
 	rpc_enabled = state
 
 @rpc("authority")

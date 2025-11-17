@@ -18,15 +18,19 @@ config/icon="res://icon.svg"
 [autoload]
 
 Helper="*res://scripts/helper.gd"
-ManagerMenu="*res://scripts/manager_menu.gd"
-ManagerPlayer="*res://scripts/manager_player.gd"
 ManagerLevel="*res://scripts/manager_level.gd"
+ManagerPlayer="*res://scripts/manager_player.gd"
+ManagerMenu="*res://scripts/manager_menu.gd"
 ManagerNetwork="*res://scripts/manager_network.gd"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=480
+
+[global_group]
+
+replicate=""
 
 [input]
 

@@ -20,7 +20,7 @@ bottom_radius = 0.3
 height = 40.0
 radial_segments = 8
 
-[node name="SpinningObstacle" type="RigidBody3D"]
+[node name="PropSpinner" type="RigidBody3D" groups=["replicate"]]
 axis_lock_linear_x = true
 axis_lock_linear_y = true
 axis_lock_linear_z = true

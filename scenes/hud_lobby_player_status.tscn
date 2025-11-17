@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://p8v61g6iagyl"]
 
-[ext_resource type="Script" uid="uid://i73vqkndhs57" path="res://scripts/hud_player_status.gd" id="1_napwo"]
+[ext_resource type="Script" uid="uid://i73vqkndhs57" path="res://scripts/gui_lobby_ready_status.gd" id="1_napwo"]
 
 [node name="HUDPlayerStatus" type="PanelContainer"]
 offset_right = 99.0

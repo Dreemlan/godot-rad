@@ -9,7 +9,7 @@ func _ready() -> void:
 	top_level = true
 
 func _process(_delta: float) -> void:
-	if ManagerNetwork.is_server(): return
+	if multiplayer.is_server(): return
 	
 	var interp_frac = Engine.get_physics_interpolation_fraction()
 	

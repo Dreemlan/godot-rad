@@ -7,6 +7,15 @@ var active_level_spawn_points: Dictionary = {}
 func _ready() -> void:
 	Helper.log(self, "Ready")
 
+func process_join() -> void:
+	if ManagerNetwork.is_server():
+		client_receieve_active_level_basename.rpc(active_level_basename)
+
+@rpc("authority", "reliable")
+func client_receieve_active_level_basename(server_value: String) -> void:
+	Helper.log(self, "Client received active level from server %s" % server_value)
+	active_level_basename = server_value
+
 @rpc("authority", "call_local", "reliable")
 func load_level(level_basename: String) -> void:
 	ManagerMenu.hide_active_menu()

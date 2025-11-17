@@ -19,7 +19,7 @@ func _on_host() -> void:
 	if %DisplayName.text == "":
 		%DisplayName.text = %DisplayName.placeholder_text
 	
-	ManagerPlayer.add_player(1, %DisplayName.text)
+	ManagerPlayer.register_player(1, %DisplayName.text)
 
 func _on_join() -> void:
 	if %IPAddress.text == "":
@@ -32,7 +32,7 @@ func _on_join() -> void:
 func _on_connected_to_server() -> void:
 	if %DisplayName.text == "":
 		%DisplayName.text = %DisplayName.placeholder_text
-	ManagerNetwork.peer_login.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
+	ManagerNetwork.join_request.rpc_id(1, multiplayer.get_unique_id(), %DisplayName.text)
 
 func progress_to_lobby() -> void:
 	hide()

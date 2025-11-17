@@ -9,41 +9,37 @@ func _ready() -> void:
 	%ReadyButton.toggled.connect(_on_toggle)
 
 func _input(_event: InputEvent) -> void:
+	if not is_multiplayer_authority(): return
+	if ManagerLevel.active_level_basename != "": return
 	if not ManagerMenu.active_menu_path == ManagerMenu.LOBBY: return
-	if not ManagerNetwork.is_authority(): return
 	if Input.is_action_just_pressed("space"):
 		%ReadyButton.button_pressed = not %ReadyButton.button_pressed
 		%ReadyButton.toggled.emit(%ReadyButton.button_pressed)
 
-func _on_toggle(toggled_on: bool) -> void:
+func _on_toggle(toggled: bool) -> void:
 	if not is_multiplayer_authority(): return
-	set_ready_status.rpc_id(1,
-		toggled_on,
-		multiplayer.get_unique_id())
+	update_ready_status.rpc_id(1, multiplayer.get_unique_id(), toggled)
 
 func set_display_name(display_name: String) -> void:
 	%DisplayName.text = display_name
 
-@rpc("any_peer", "call_local", "reliable")
-func set_ready_status(status: bool, id: int) -> void:
-	# Ignore if already set
-	if is_ready == status: return
-	
-	# Update local variable
-	is_ready = status
-	
-	var display_name = ManagerPlayer.players[id]["display_name"]
-	set_display_name(display_name)
-	
-	# Update GUI
+func set_ready_status(status: bool) -> void:
 	if status == true:
 		%ReadyButton.text = "READY"
 		%ReadyButton.modulate = Color.GREEN
 	else:
 		%ReadyButton.text = "NOT READY"
 		%ReadyButton.modulate = Color.RED
+
+@rpc("any_peer", "call_local", "reliable")
+func update_ready_status(id: int, status: bool) -> void:
+	if is_ready == status: return
+	is_ready = status
+	Helper.log(self, "Updating ready status %s" % status)
 	
-	# Server sends to clients and emits signal for processing
+	set_display_name(ManagerPlayer.players[id]["display_name"])
+	set_ready_status(status)
+	
 	if multiplayer.is_server():
-		set_ready_status.rpc(status, id)
+		update_ready_status.rpc(id, status)
 		ready_status_changed.emit(id, status)

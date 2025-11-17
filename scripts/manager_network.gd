@@ -12,8 +12,7 @@ func create_server() -> void:
 	if err != OK:
 		Helper.log(self, "Failed to start server: %s" % err)
 		return
-	multiplayer.set_multiplayer_peer(peer)
-	#multiplayer.multiplayer_peer = peer
+	multiplayer.multiplayer_peer = peer
 	if not multiplayer.peer_disconnected.is_connected(_on_peer_disconnected):
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	Helper.log(self, "Server started")
@@ -52,18 +51,9 @@ func _on_server_disconnected() -> void:
 	ManagerMenu.load_menu(ManagerMenu.MAIN)
 	shutdown_client()
 
-func is_server() -> bool:
-	if multiplayer.multiplayer_peer && multiplayer.is_server(): return true
-	return false
-
-func is_authority() -> bool:
-	if multiplayer.multiplayer_peer && is_multiplayer_authority(): return true
-	return false
-
 @rpc("any_peer", "call_local", "reliable")
-func peer_login(id: int, display_name: String) -> void:
-	Helper.log(self, "Requesting login to server...")
-	ManagerPlayer.add_player.rpc(id, display_name)
-	
+func join_request(id: int, display_name: String) -> void:
+	Helper.log(self, "Requesting to join server...")
 	if multiplayer.is_server(): # Handshake with client
-		peer_login.rpc_id(id, id, display_name)
+		ManagerPlayer.register_player.rpc(id, display_name)
+		join_request.rpc_id(id, id, display_name)

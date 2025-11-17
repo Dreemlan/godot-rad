@@ -15,14 +15,19 @@ func _ready() -> void:
 	if not active_menu_node: active_menu_node = main_menu
 	if not active_menu_path: active_menu_path = MAIN
 
+func process_join() -> void:
+	Helper.log(self, "Processing join")
+	load_menu(LOBBY)
+
 @rpc("authority", "call_local", "reliable")
 func load_menu(menu_path: String) -> void:
 	## If target menu is already active
 	if menu_path == active_menu_path: 
 		Helper.log(self, "Menu already active")
-		match active_menu_path:
-			PAUSE:
-				active_menu_node.visible = not active_menu_node.visible
+		active_menu_node.visible = not active_menu_node.visible
+		#match active_menu_path:
+			#PAUSE:
+				#active_menu_node.visible = not active_menu_node.visible
 		return
 	
 	active_menu_node.queue_free()
@@ -40,7 +45,20 @@ func quit_to_main() -> void:
 	Helper.log(self, "Quit to main menu")
 	await get_tree().process_frame
 	load_menu(MAIN)
-	if ManagerNetwork.is_server():
+	if multiplayer.is_server():
 		ManagerNetwork.shutdown_server()
 	else:
 		ManagerNetwork.shutdown_client()
+
+@rpc("authority", "call_local", "reliable")
+func quit_to_lobby() -> void:
+	Helper.log(self, "Quit to lobby")
+	await get_tree().process_frame
+	
+	for replicate_node in get_tree().get_nodes_in_group("replicate"):
+		replicate_node.queue_deletion()
+	
+	await get_tree().process_frame
+	#ManagerPlayer.clear_player_nodes()
+	ManagerLevel.clear_level()
+	load_menu(LOBBY)

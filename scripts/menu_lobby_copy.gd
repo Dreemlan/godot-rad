@@ -5,12 +5,17 @@ var ready_statuses: Dictionary[int, Dictionary] = {}
 
 func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
+	
+	# Client requests setup on server
+	# This is IMPORTANT because it forces the client to load existing data first
+	gui_add_player_ready.rpc_id(1,
+		multiplayer.get_unique_id(),
+		ManagerPlayer.players[multiplayer.get_unique_id()]["display_name"])
+	
+	# Connect signals on server
 	if multiplayer.is_server():
-		gui_add_player_ready(1, ManagerPlayer.players[1]["display_name"])
-		%ButtonLevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
+		%LevelOne.pressed.connect(_on_level_one_select.bind("level_one"))
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
-	else:
-		server_receieve_client_join.rpc_id(1, multiplayer.get_unique_id())
 
 func _input(event: InputEvent) -> void:
 	if ManagerLevel.active_level_node: return
@@ -47,15 +52,12 @@ func _check_all_ready() -> bool:
 func _update_all_gui() -> void:
 	for id in active_gui_nodes:
 		var node = active_gui_nodes[id]
-		var status = ready_statuses[id]["status"]
-		node.set_display_name(ManagerPlayer.players[id]["display_name"])
-		node.update_ready_status(id, status)
+		node.set_display_name(ManagerPlayer.players[id])
+		node.set_ready_status(ready_statuses[id]["status"])
 
 @rpc("any_peer", "call_local", "reliable")
 func gui_add_player_ready(id: int, display_name: String) -> void:
-	if active_gui_nodes.has(id):
-		_update_all_gui()
-		return
+	if active_gui_nodes.has(id): return
 	
 	if not ready_statuses.has(id):
 		ready_statuses.set(id, {
@@ -84,16 +86,3 @@ func gui_remove_player_ready(id: int) -> void:
 	ready_statuses.erase(id)
 	if %PlayerContainer.has_node(str(id)):
 		%PlayerContainer.get_node(str(id)).call_deferred("queue_free")
-
-# Server receives new player and adds/updates GUI
-@rpc("any_peer", "reliable")
-func server_receieve_client_join(id: int) -> void:
-	gui_add_player_ready(id, ManagerPlayer.players[id]["display_name"])
-	client_receive_state.rpc(ready_statuses)
-
-# Client receives state with fresh data, then adds GUI
-@rpc("authority", "reliable")
-func client_receive_state(server_state) -> void:
-	ready_statuses = server_state
-	for id in ManagerPlayer.players:
-		gui_add_player_ready(id, ManagerPlayer.players[id]["display_name"])

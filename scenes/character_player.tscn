@@ -12,7 +12,7 @@ height = 1.5
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3vyb7"]
 height = 1.5
 
-[node name="Player" type="RigidBody3D"]
+[node name="Player" type="RigidBody3D" groups=["replicate"]]
 mass = 60.0
 physics_material_override = SubResource("PhysicsMaterial_3vyb7")
 can_sleep = false
@@ -30,7 +30,7 @@ target_position = Vector3(0, -9, 0)
 unique_name_in_owner = true
 target_position = Vector3(0, -2, 0)
 
-[node name="Controller" type="Node" parent="."]
+[node name="Controller" type="Node" parent="." groups=["replicate"]]
 unique_name_in_owner = true
 script = ExtResource("2_g2els")
 
