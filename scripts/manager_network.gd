@@ -43,7 +43,7 @@ func shutdown_client() -> void:
 
 func _on_peer_disconnected(id: int) -> void:
 	Helper.log(self, "%s disconnected" % id)
-	ManagerPlayer.remove_player(id)
+	ManagerPlayer.remove_player.rpc(id)
 
 func _on_server_disconnected() -> void:
 	Helper.log(self, "Lost connection to server")
@@ -51,9 +51,11 @@ func _on_server_disconnected() -> void:
 	ManagerMenu.load_menu(ManagerMenu.MAIN)
 	shutdown_client()
 
+# Called when client has successfully connected to server
 @rpc("any_peer", "call_local", "reliable")
 func join_request(id: int, display_name: String) -> void:
-	Helper.log(self, "Requesting to join server...")
+	if ManagerPlayer.players.has(id): return
 	if multiplayer.is_server(): # Handshake with client
+		Helper.log(self, "%s requesting to join server..." % id)
 		ManagerPlayer.register_player.rpc(id, display_name)
 		join_request.rpc_id(id, id, display_name)

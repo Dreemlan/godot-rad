@@ -2,6 +2,7 @@ extends Node
 
 const MAIN = "menu_main"
 const LOBBY = "menu_lobby"
+const LOBBY_V2 = "level_lobby"
 const SETTINGS = "menu_settings"
 const PAUSE = "menu_pause"
 
@@ -15,9 +16,11 @@ func _ready() -> void:
 	if not active_menu_node: active_menu_node = main_menu
 	if not active_menu_path: active_menu_path = MAIN
 
+@rpc("authority", "call_local", "reliable")
 func process_join() -> void:
 	Helper.log(self, "Processing join")
-	load_menu(LOBBY)
+	#load_menu(LOBBY)
+	ManagerLevel.load_level(ManagerLevel.LEVEL_LOBBY)
 
 @rpc("authority", "call_local", "reliable")
 func load_menu(menu_path: String) -> void:
@@ -43,7 +46,6 @@ func hide_active_menu() -> void:
 
 func quit_to_main() -> void:
 	Helper.log(self, "Quit to main menu")
-	await get_tree().process_frame
 	load_menu(MAIN)
 	if multiplayer.is_server():
 		ManagerNetwork.shutdown_server()
@@ -53,12 +55,9 @@ func quit_to_main() -> void:
 @rpc("authority", "call_local", "reliable")
 func quit_to_lobby() -> void:
 	Helper.log(self, "Quit to lobby")
-	await get_tree().process_frame
 	
 	for replicate_node in get_tree().get_nodes_in_group("replicate"):
 		replicate_node.queue_deletion()
 	
-	await get_tree().process_frame
-	#ManagerPlayer.clear_player_nodes()
 	ManagerLevel.clear_level()
 	load_menu(LOBBY)

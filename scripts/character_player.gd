@@ -13,13 +13,15 @@ var hover_damping: float = 10.0
 @onready var floor_ray: RayCast3D = %FloorRay
 
 # Move
-var move_speed: float = 100.0
+var move_speed: float = 50.0
 
 # Jump
-var jump_impulse: float = 20.0
+var jump_impulse: float = 25.0
+
+signal player_spawned(id: int)
 
 func _ready() -> void:
-	Helper.log(self, "Ready")
+	Helper.log(self, "Added to scene tree")
 	
 	if multiplayer.is_server():
 		pass
@@ -27,6 +29,9 @@ func _ready() -> void:
 		toggle_rpc.rpc_id(1, true)
 		
 	%Controller.set_multiplayer_authority(int(self.name))
+	%FloatingNameLabel.text = ManagerPlayer.players[int(self.name)]["display_name"]
+	
+	player_spawned.emit(int(self.name))
 
 func _exit_tree() -> void:
 	Helper.log(self, "Exit tree")
@@ -44,13 +49,17 @@ func _physics_process(_delta: float) -> void:
 			"pos": global_position
 		}
 		if not rpc_enabled: return
-		client_receive_transforms.rpc(server_transforms)
+		for p in ManagerPlayer.fully_loaded_players:
+			client_receive_transforms.rpc_id(p, server_transforms)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_hover(state)
 
 func _hover(state: PhysicsDirectBodyState3D) -> void:
-	if not is_on_floor(): return
+	if not is_on_floor():
+		linear_damp = 0.0
+		return
+	linear_damp = 4.0
 	if not hover_ray.is_colliding(): return
 	
 	var hit: Vector3 = hover_ray.get_collision_point()
@@ -69,9 +78,12 @@ func is_on_floor() -> bool:
 
 @rpc("any_peer", "call_local", "reliable")
 func toggle_rpc(state: bool) -> void:
-	Helper.log(self, "@rpc %s" % state)
 	rpc_enabled = state
+	var id: int = multiplayer.get_remote_sender_id()
+	if ManagerPlayer.fully_loaded_players.has(id): return
+	ManagerPlayer.fully_loaded_players.append(id)
 
-@rpc("authority")
+@rpc("authority", "call_local", "unreliable")
 func client_receive_transforms(server_transforms: Dictionary) -> void:
+	if multiplayer.is_server(): return
 	global_position = server_transforms["pos"]

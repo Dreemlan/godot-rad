@@ -19,7 +19,7 @@ func _on_host() -> void:
 	if %DisplayName.text == "":
 		%DisplayName.text = %DisplayName.placeholder_text
 	
-	ManagerPlayer.register_player(1, %DisplayName.text)
+	ManagerNetwork.join_request(1, %DisplayName.text)
 
 func _on_join() -> void:
 	if %IPAddress.text == "":

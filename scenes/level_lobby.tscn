@@ -1,0 +1,77 @@
+[gd_scene load_steps=12 format=3 uid="uid://dm6fr4era6ati"]
+
+[ext_resource type="Script" uid="uid://l101tbrnmvb7" path="res://scripts/level_lobby.gd" id="1_u0ps1"]
+[ext_resource type="Script" uid="uid://barjvoxmpbx0m" path="res://scripts/game_camera.gd" id="2_iae1u"]
+[ext_resource type="Texture2D" uid="uid://clv2ymuqx5b2b" path="res://assets/sky_44_2k/sky_44_2k.png" id="3_b3lbs"]
+[ext_resource type="Script" uid="uid://hasquroxqdxa" path="res://scripts/prop_killzone.gd" id="6_ibbcx"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gee14"]
+panorama = ExtResource("3_b3lbs")
+
+[sub_resource type="Sky" id="Sky_0tnpc"]
+sky_material = SubResource("PanoramaSkyMaterial_gee14")
+
+[sub_resource type="Environment" id="Environment_yqjtg"]
+background_mode = 2
+sky = SubResource("Sky_0tnpc")
+tonemap_mode = 3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lbhrr"]
+height = 1.0
+radius = 32.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cj0n"]
+albedo_color = Color(0.5882353, 0, 0.25490198, 1)
+roughness = 0.05
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_iywne"]
+top_radius = 32.0
+bottom_radius = 32.0
+height = 1.0
+radial_segments = 32
+rings = 1
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_p57ef"]
+
+[node name="LevelLobby" type="Node" node_paths=PackedStringArray("spawn_point_path")]
+script = ExtResource("1_u0ps1")
+spawn_point_path = NodePath("PlayerSpawnPoints")
+
+[node name="GameCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8, 13)
+current = true
+script = ExtResource("2_iae1u")
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.21112694, 0.8803033, 0.4248427, -0.099643886, -0.45175913, 0.8865578, 0.97236645, 0.14484331, 0.18309534, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_yqjtg")
+
+[node name="Level" type="Node" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Floor"]
+shape = SubResource("CylinderShape3D_lbhrr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Floor"]
+material_override = SubResource("StandardMaterial3D_8cj0n")
+mesh = SubResource("CylinderMesh_iywne")
+
+[node name="PlayerSpawnPoints" type="Node" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="PlayerSpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Killzone" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("6_ibbcx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Killzone"]
+shape = SubResource("WorldBoundaryShape3D_p57ef")

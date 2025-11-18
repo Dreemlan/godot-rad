@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/character_player_controller.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="3_qhqgy"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3vyb7"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mc5b1"]
+friction = 0.0
+bounce = 0.3
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
 height = 1.5
@@ -13,8 +15,8 @@ height = 1.5
 height = 1.5
 
 [node name="Player" type="RigidBody3D" groups=["replicate"]]
-mass = 60.0
-physics_material_override = SubResource("PhysicsMaterial_3vyb7")
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_mc5b1")
 can_sleep = false
 lock_rotation = true
 script = ExtResource("1_3vyb7")
@@ -40,3 +42,13 @@ script = ExtResource("3_qhqgy")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
 mesh = SubResource("CapsuleMesh_3vyb7")
 skeleton = NodePath("../..")
+
+[node name="FloatingNameLabel" type="Label3D" parent="Mesh"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+double_sided = false
+no_depth_test = true
+fixed_size = true
+text = "Display Name"
+font_size = 12

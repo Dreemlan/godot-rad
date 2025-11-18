@@ -31,11 +31,13 @@ func _handle_movement() -> void:
 		#_apply_movement()
 
 func _apply_movement() -> void:
+	if input_dir == Vector2.ZERO: return
 	var move_dir = Vector3(input_dir.x, 0, input_dir.y)
 	body.apply_central_force(move_dir * body.move_speed * body.mass)
 
 func _apply_jump() -> void:
 	if jumping:
+		body.linear_damp = 0
 		body.apply_central_impulse(Vector3.UP * body.jump_impulse * body.mass)
 		jumping = false
 
@@ -44,13 +46,11 @@ func _handle_jump() -> void:
 		_apply_jump()
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("jump") && body.is_on_floor():
-			Helper.log(self, "jump")
 			jumping = true
 			server_receive_jump.rpc_id(1)
 
 @rpc("any_peer", "call_remote", "reliable")
 func toggle_rpc(state: bool) -> void:
-	Helper.log(self, "@rpc %s" % state)
 	rpc_enabled = state
 
 @rpc("any_peer", "call_local", "reliable")
