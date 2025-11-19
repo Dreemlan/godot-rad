@@ -6,7 +6,6 @@ const LEVEL_LOBBY: String = "level_lobby"
 var active_level_node: Node = null
 var active_level_basename: String = ""
 var active_level_spawn_points: Dictionary = {}
-var active_level_camera: Node = null
 
 func _ready() -> void:
 	Helper.log(self, "Ready")
@@ -47,6 +46,3 @@ func get_free() -> Vector3:
 			sp[i]["free"] = false
 			return pos
 	return pos
-
-func set_camera_focus(target: Node) -> void:
-	active_level_camera.focus = target

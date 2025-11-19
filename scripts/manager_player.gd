@@ -64,6 +64,7 @@ func clear_player_nodes() -> void:
 	for player in get_children():
 		player.queue_deletion.rpc()
 
-func _on_player_spawned(id: int) -> void:
-	if id == multiplayer.get_unique_id():
-		ManagerLevel.set_camera_focus(active_player_nodes[id])
+func _on_player_spawned(_id: int) -> void:
+	pass
+	#if id == multiplayer.get_unique_id():
+		#ManagerLevel.set_camera_focus(active_player_nodes[id])

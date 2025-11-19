@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var focus: Node
+@onready var controller = get_parent() as Node3D
 
 var mouse_sensitivity: float	= 0.1
 var twist_input: float 			= 0.0
@@ -10,12 +10,6 @@ func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
 	ManagerLevel.active_level_camera = self
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-func _process(delta: float) -> void:
-	if focus == null: return
-	
-	global_position = global_position.lerp(
-		focus.global_position, delta * 2.0)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:

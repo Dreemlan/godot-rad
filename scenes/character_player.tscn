@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://5h2twfl5cmak"]
+[gd_scene load_steps=8 format=3 uid="uid://5h2twfl5cmak"]
 
 [ext_resource type="Script" uid="uid://bhqol1exam42n" path="res://scripts/character_player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/character_player_controller.gd" id="2_g2els"]
@@ -13,6 +13,9 @@ height = 1.5
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3vyb7"]
 height = 1.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_mc5b1"]
+size = Vector3(0.6, 0.2, 0.2)
 
 [node name="Player" type="RigidBody3D" groups=["replicate"]]
 mass = 30.0
@@ -32,18 +35,24 @@ target_position = Vector3(0, -9, 0)
 unique_name_in_owner = true
 target_position = Vector3(0, -2, 0)
 
-[node name="Controller" type="Node" parent="." groups=["replicate"]]
+[node name="Controller" type="Node3D" parent="." groups=["replicate"]]
 unique_name_in_owner = true
 script = ExtResource("2_g2els")
 
-[node name="Mesh" type="Node3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="Controller"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 7, 10)
+fov = 60.0
+
+[node name="Mesh" type="Node3D" parent="Controller"]
+unique_name_in_owner = true
 script = ExtResource("3_qhqgy")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Controller/Mesh"]
 mesh = SubResource("CapsuleMesh_3vyb7")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
-[node name="FloatingNameLabel" type="Label3D" parent="Mesh"]
+[node name="FloatingNameLabel" type="Label3D" parent="Controller/Mesh"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 billboard = 1
@@ -52,3 +61,7 @@ no_depth_test = true
 fixed_size = true
 text = "Display Name"
 font_size = 12
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Controller/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23662257, -0.496068)
+mesh = SubResource("BoxMesh_mc5b1")
