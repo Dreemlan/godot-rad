@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://kucurh7sotvd"]
 
 [ext_resource type="Script" uid="uid://x5lqveshk3h5" path="res://scripts/prop_spinner.gd" id="1_2s170"]
-[ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="2_bib0d"]
+[ext_resource type="Script" uid="uid://ey823aace23f" path="res://scripts/prop_mesh.gd" id="2_jqu14"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2s170"]
 friction = 0.0
@@ -37,7 +37,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0
 shape = SubResource("CylinderShape3D_8cj0n")
 
 [node name="Mesh" type="Node3D" parent="."]
-script = ExtResource("2_bib0d")
+script = ExtResource("2_jqu14")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)

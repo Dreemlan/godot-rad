@@ -8,7 +8,6 @@ var pitch_input: float			= 0.0
 
 func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
-	ManagerLevel.active_level_camera = self
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _process(delta: float) -> void:

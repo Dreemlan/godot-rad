@@ -12,8 +12,7 @@ func _ready() -> void:
 		})
 	ManagerPlayer.spawn_all_players.rpc_id(1)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if Input.is_action_just_pressed("esc"):
-			await get_tree().process_frame
-			ManagerMenu.load_menu(ManagerMenu.PAUSE)
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("esc"):
+		await get_tree().process_frame
+		ManagerMenu.load_menu(ManagerMenu.PAUSE)

@@ -22,13 +22,13 @@ signal player_spawned(id: int)
 
 func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
+	%Controller.set_multiplayer_authority(int(self.name))
 	
 	if multiplayer.is_server():
 		pass
 	else:
 		toggle_rpc.rpc_id(1, true)
-		
-	%Controller.set_multiplayer_authority(int(self.name))
+	
 	%FloatingNameLabel.text = ManagerPlayer.players[int(self.name)]["display_name"]
 	
 	player_spawned.emit(int(self.name))
@@ -49,8 +49,8 @@ func _physics_process(_delta: float) -> void:
 			"pos": global_position
 		}
 		if not rpc_enabled: return
-		for p in ManagerPlayer.fully_loaded_players:
-			client_receive_transforms.rpc_id(p, server_transforms)
+		#for p in ManagerPlayer.fully_loaded_players:
+			#client_receive_transforms.rpc_id(p, server_transforms)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_hover(state)

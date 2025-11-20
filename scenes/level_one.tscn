@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1ejeyiat2coi"]
+[gd_scene load_steps=13 format=3 uid="uid://b1ejeyiat2coi"]
 
 [ext_resource type="Script" uid="uid://dadliqpmffxe6" path="res://scripts/level_one.gd" id="1_4p75b"]
-[ext_resource type="Script" uid="uid://barjvoxmpbx0m" path="res://scripts/game_camera.gd" id="1_bhu28"]
 [ext_resource type="Texture2D" uid="uid://clv2ymuqx5b2b" path="res://assets/sky_44_2k/sky_44_2k.png" id="2_4p75b"]
 [ext_resource type="PackedScene" uid="uid://c80dlgghe12u8" path="res://scenes/prop_wall.tscn" id="3_y8ti4"]
 [ext_resource type="PackedScene" uid="uid://kucurh7sotvd" path="res://scenes/prop_spinner.tscn" id="4_astit"]
@@ -38,12 +37,6 @@ rings = 1
 [node name="LevelOne" type="Node" node_paths=PackedStringArray("spawn_point_path")]
 script = ExtResource("1_4p75b")
 spawn_point_path = NodePath("PlayerSpawnPoints")
-
-[node name="GameCamera" type="Camera3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8, 13)
-current = true
-script = ExtResource("1_bhu28")
 
 [node name="Environment" type="Node" parent="."]
 

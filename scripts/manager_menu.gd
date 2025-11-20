@@ -19,7 +19,6 @@ func _ready() -> void:
 @rpc("authority", "call_local", "reliable")
 func process_join() -> void:
 	Helper.log(self, "Processing join")
-	#load_menu(LOBBY)
 	ManagerLevel.load_level(ManagerLevel.LEVEL_LOBBY)
 
 @rpc("authority", "call_local", "reliable")
