@@ -111,5 +111,7 @@ look_right={
 
 [physics]
 
+common/physics_ticks_per_second=30
+common/max_physics_steps_per_frame=6
 3d/physics_engine="Jolt Physics"
 3d/default_gravity=24.0

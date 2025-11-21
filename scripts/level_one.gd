@@ -10,7 +10,7 @@ func _ready() -> void:
 			"pos": point.global_position,
 			"free": true
 		})
-	ManagerPlayer.spawn_all_players()
+	ManagerPlayer.spawn_all_players.rpc_id(1)
 
 
 func _input(event: InputEvent) -> void:

@@ -4,7 +4,7 @@ var rpc_enabled: bool = false
 
 func _ready() -> void:
 	if multiplayer.is_server():
-		constant_torque = Vector3(0, 20000.0, 0)
+		constant_torque = Vector3(0, 10000.0, 0)
 	else:
 		toggle_rpc.rpc_id(1, true)
 

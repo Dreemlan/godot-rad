@@ -22,9 +22,13 @@ func client_receieve_active_level_basename(server_value: String) -> void:
 @rpc("authority", "call_local", "reliable")
 func load_level(level_basename: String) -> void:
 	ManagerMenu.hide_active_menu()
+	#if active_level_node:
+		#print("Game is in progress")
+		#return
+	
 	if active_level_node:
-		print("Game is in progress")
-		return
+		active_level_node.queue_free()
+	
 	var level_inst = load("res://scenes/%s.tscn" % level_basename).instantiate()
 	add_child(level_inst)
 	active_level_node = level_inst

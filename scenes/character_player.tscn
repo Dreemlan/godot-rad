@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://5h2twfl5cmak"]
+[gd_scene load_steps=10 format=3 uid="uid://5h2twfl5cmak"]
 
 [ext_resource type="Script" uid="uid://bhqol1exam42n" path="res://scripts/character_player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dfybxa0i5hsj8" path="res://scripts/character_player_controller.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://6dc5hx5ecey2" path="res://scripts/character_player_mesh.gd" id="3_mc5b1"]
+[ext_resource type="Script" uid="uid://0xtv4y8gxwqh" path="res://scripts/character_player_camera_rig.gd" id="3_njumh"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mc5b1"]
 friction = 0.0
@@ -10,6 +11,8 @@ bounce = 0.3
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
 height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njumh"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3vyb7"]
 height = 1.5
@@ -19,7 +22,7 @@ size = Vector3(0.6, 0.2, 0.2)
 
 [node name="Player" type="RigidBody3D" groups=["replicate"]]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 7
 mass = 30.0
 physics_material_override = SubResource("PhysicsMaterial_mc5b1")
 can_sleep = false
@@ -28,29 +31,37 @@ script = ExtResource("1_3vyb7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_u8vuu")
+debug_color = Color(0, 0, 1, 1)
 
 [node name="HoverRay" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 target_position = Vector3(0, -9, 0)
+collision_mask = 3
 
 [node name="FloorRay" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 target_position = Vector3(0, -2, 0)
+collision_mask = 3
 
 [node name="Controller" type="Node3D" parent="." groups=["replicate"]]
 unique_name_in_owner = true
 script = ExtResource("2_g2els")
 
-[node name="Camera3D" type="Camera3D" parent="Controller"]
+[node name="CameraRig" type="Node3D" parent="Controller"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 3, 7)
-fov = 60.0
+script = ExtResource("3_njumh")
+
+[node name="Camera3D" type="Camera3D" parent="Controller/CameraRig"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 4, 7)
 
 [node name="Mesh" type="Node3D" parent="Controller"]
 unique_name_in_owner = true
 script = ExtResource("3_mc5b1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Controller/Mesh"]
+[node name="Body" type="MeshInstance3D" parent="Controller/Mesh"]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_njumh")
 mesh = SubResource("CapsuleMesh_3vyb7")
 skeleton = NodePath("../../..")
 

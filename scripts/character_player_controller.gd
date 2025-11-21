@@ -1,9 +1,8 @@
 # Client authority
+# Client controls their own camera and input, movement is derived from that then sent to server
 extends Node3D
 
 @onready var body = get_parent() as RigidBody3D
-
-var rpc_enabled: bool = false
 
 # Look
 var joypad_look_sensitivity = 200.0
@@ -13,29 +12,20 @@ var twist_input: float 			= 0.0
 var pitch_input: float			= 0.0
 
 # Movement
-var move_dir_2d: Vector2 = Vector2.ZERO
-var move_dir_3d: Vector3 = Vector3.ZERO
-var look_dir: Vector3 = Vector3.ZERO
 var input_dir: Vector2 = Vector2.ZERO
+var move_dir: Vector3 = Vector3.ZERO
 var jumping: bool = false
 
 func _ready() -> void:
 	Helper.log(self, "Added to scene tree")
-	
-	if is_multiplayer_authority():
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if not is_multiplayer_authority():
+		%Camera3D.current = false
 	else:
-		toggle_rpc(true)
-		toggle_rpc.rpc_id(1, true)
+		%Camera3D.current = true
 
 func _process(delta: float) -> void:
-	_apply_camera_mouse(delta)
-	_apply_camera_joypad(delta)
-	mouse_look_delta = Vector2.ZERO
-	look_dir = -basis.z.normalized()
-	
 	if is_multiplayer_authority():
-		input_dir = Input.get_vector("left", "right", "up", "down").normalized()
+		_authority_movement(delta)
 
 func _physics_process(_delta: float) -> void:
 	_handle_movement()
@@ -46,49 +36,60 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseMotion:
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				mouse_look_delta += event.relative
-		#elif event is InputEventKey:
-			#_toggle_mouse_mode()
+
+func _authority_movement(delta) -> void:
+	_apply_camera_mouse(delta)
+	_apply_camera_joypad(delta)
+	
+	input_dir = Focus.input_get_vector("left", "right", "up", "down").normalized()
+	var right_3d = basis.x
+	var forward_3d = basis.z
+	var right_2d = Vector2(right_3d.x, right_3d.z).normalized()
+	var forward_2d = Vector2(forward_3d.x, forward_3d.z).normalized()
+	var move_dir_2d = right_2d * input_dir.x + forward_2d * input_dir.y
+	move_dir = Vector3(move_dir_2d.x, 0, move_dir_2d.y)
+	
+	mouse_look_delta = Vector2.ZERO
 
 func _handle_movement() -> void:
-	# Server applies movement regardless of authority
-	# Derived from input_dir which clients send
 	if multiplayer.is_server():
 		_apply_movement()
+		if not body.rpc_enabled: return
+		for p in ManagerPlayer.fully_loaded_players:
+			client_receive_move_dir.rpc_id(p, move_dir)
 	if is_multiplayer_authority():
-		pass
-		#if not multiplayer.is_server():
-			#if not rpc_enabled: return
-			#server_receive_move.rpc_id(1, input_dir)
+		if not multiplayer.is_server():
+			server_receive_move.rpc_id(1, move_dir)
+			#server_receive_controller_basis.rpc_id(1, basis)
 
 func _handle_jump() -> void:
+	if multiplayer.is_server():
+		_apply_jump()
 	if is_multiplayer_authority():
-		if Input.is_action_just_pressed("jump") && body.is_on_floor():
+		if Focus.input_is_action_just_pressed("jump") && body.is_on_floor():
 			jumping = true
 			_apply_jump()
+			if not multiplayer.is_server():
+				server_recieve_jump.rpc_id(1)
 
 func _apply_camera_mouse(delta: float) -> void:
 	if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: return
+	if not is_multiplayer_authority(): return
 	twist_input -= mouse_look_delta.x * mouse_look_sensitivity * delta
 	pitch_input -= mouse_look_delta.y * mouse_look_sensitivity * delta
 	pitch_input = clamp(pitch_input, -85, 85)
 	basis = _quat_rotate(twist_input, pitch_input)
 
 func _apply_camera_joypad(delta: float) -> void:
-	twist_input -= Input.get_axis("look_left", "look_right") * joypad_look_sensitivity * delta
-	pitch_input -= Input.get_axis("look_up", "look_down") * joypad_look_sensitivity * delta
+	if not is_multiplayer_authority(): return
+	twist_input -= Focus.input_get_axis("look_left", "look_right") * joypad_look_sensitivity * delta
+	pitch_input -= Focus.input_get_axis("look_up", "look_down") * joypad_look_sensitivity * delta
 	pitch_input = clamp(pitch_input, -85, 85)
 	basis = _quat_rotate(twist_input, pitch_input)
 
 func _apply_movement() -> void:
-	if input_dir == Vector2.ZERO: return
-	var right_3d = basis.x
-	var forward_3d = basis.z
-	var right_2d = Vector2(right_3d.x, right_3d.z).normalized()
-	var forward_2d = Vector2(forward_3d.x, forward_3d.z).normalized()
-	move_dir_2d = right_2d * input_dir.x + forward_2d * input_dir.y
-	move_dir_3d = Vector3(move_dir_2d.x, 0, move_dir_2d.y)
 	if not body.is_on_floor(): return
-	body.apply_central_force(move_dir_3d * body.move_speed * body.mass)
+	body.apply_central_force(move_dir * body.move_speed * body.mass)
 
 func _apply_jump() -> void:
 	if jumping:
@@ -108,17 +109,14 @@ func _quat_rotate(twist, pitch) -> Basis:
 	var pitch_quat = Quaternion(Vector3.RIGHT, deg_to_rad(pitch))
 	return Basis(twist_quat * pitch_quat)
 
-@rpc("any_peer", "call_remote", "reliable")
-func toggle_rpc(state: bool) -> void:
-	rpc_enabled = state
-
-@rpc("any_peer", "call_local", "reliable")
-func queue_deletion() -> void:
-	Helper.log(self, "Queued for deletion")
-	toggle_rpc(false)
-	await get_tree().create_timer(1.0).timeout
-	call_deferred("queue_free")
+@rpc("any_peer", "call_local", "unreliable")
+func server_receive_move(client_state) -> void:
+	move_dir = client_state
 
 @rpc("any_peer")
-func server_receive_move(client_input: Vector2) -> void:
-	input_dir = client_input
+func client_receive_move_dir(server_move_dir) -> void:
+	move_dir = server_move_dir
+
+@rpc("authority")
+func server_recieve_jump() -> void:
+	jumping = true

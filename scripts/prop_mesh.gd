@@ -5,7 +5,6 @@ extends Node3D
 var body_prev_transform_basis: Basis
 
 func _ready() -> void:
-	Helper.log(self, "Added to scene tree")
 	top_level = true
 
 func _process(_delta: float) -> void:
@@ -18,7 +17,6 @@ func _process(_delta: float) -> void:
 	var q_prev = body_prev_transform_basis.get_rotation_quaternion()
 	var q_curr = body.global_transform.basis.get_rotation_quaternion()
 	var smooth_q = q_prev.slerp(q_curr, interp_frac).normalized()
-	
 	global_transform.basis = Basis(smooth_q)
 
 func _physics_process(_delta: float) -> void:

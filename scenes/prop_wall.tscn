@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://c80dlgghe12u8"]
+[gd_scene load_steps=5 format=3 uid="uid://c80dlgghe12u8"]
+
+[ext_resource type="Texture2D" uid="uid://b2eycsrlip8d5" path="res://addons/godot-prototype-texture/Vector/checker_512x512/checker_orange_512x512.svg" id="1_v3qnk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
 size = Vector3(5, 10, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnu2h"]
-albedo_color = Color(0.5882353, 0, 0.25490198, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h4jdr"]
+albedo_texture = ExtResource("1_v3qnk")
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_lbhrr"]
 size = Vector3(5, 10, 1)
@@ -15,5 +19,5 @@ size = Vector3(5, 10, 1)
 shape = SubResource("BoxShape3D_yqjtg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_lnu2h")
+material_override = SubResource("StandardMaterial3D_h4jdr")
 mesh = SubResource("BoxMesh_lbhrr")

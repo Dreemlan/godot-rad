@@ -53,9 +53,9 @@ func _on_server_disconnected() -> void:
 
 # Called when client has successfully connected to server
 @rpc("any_peer", "call_local", "reliable")
-func join_request(id: int, display_name: String) -> void:
+func join_request(id: int, display_name: String, color: Color) -> void:
 	if ManagerPlayer.players.has(id): return
 	if multiplayer.is_server(): # Handshake with client
 		Helper.log(self, "%s requesting to join server..." % id)
-		ManagerPlayer.register_player.rpc(id, display_name)
-		join_request.rpc_id(id, id, display_name)
+		ManagerPlayer.register_player.rpc(id, display_name, color)
+		join_request.rpc_id(id, id, display_name, color)

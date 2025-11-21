@@ -11,13 +11,18 @@ func _ready() -> void:
 	Helper.log(self, "Ready")
 
 @rpc("authority", "call_local", "reliable")
-func register_player(new_id: int, display_name: String) -> void:
-	players[new_id] = { "display_name": display_name }
+func register_player(new_id: int, display_name: String, color: Color) -> void:
+	players[new_id] = {
+		"display_name": display_name,
+		"color": color,
+		}
 	
 	if multiplayer.is_server():
 		for existing_id in ManagerPlayer.players:
 			if existing_id == new_id: continue
-			register_player.rpc_id(new_id, existing_id, players[existing_id]["display_name"])
+			register_player.rpc_id(new_id, existing_id,
+				players[existing_id]["display_name"],
+				players[existing_id]["color"])
 		ManagerMenu.process_join.rpc_id(new_id)
 	
 	Helper.log(self, "Successfully registered player %s to 'players'" % display_name)
