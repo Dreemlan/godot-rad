@@ -36,7 +36,9 @@ func remove_player(id: int) -> void:
 
 @rpc("authority", "call_local", "reliable")
 func spawn_player(id: int) -> void:
-	if has_node(str(id)): return
+	if has_node(str(id)):
+		get_node(str(id)).global_position = ManagerLevel.get_free_spawn_point()
+		return
 	var inst = PLAYER.instantiate()
 	inst.name = str(id)
 	
@@ -45,7 +47,7 @@ func spawn_player(id: int) -> void:
 	active_player_nodes.set(id, inst)
 	
 	add_child(inst)
-	inst.global_position = ManagerLevel.get_free()
+	inst.global_position = ManagerLevel.get_free_spawn_point()
 	Helper.log(self, "Added 'Player' %s to scene tree" % ManagerPlayer.players[id]["display_name"])
 
 func despawn_player(id: int) -> void:

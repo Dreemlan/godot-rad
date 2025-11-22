@@ -19,7 +19,7 @@ func _ready() -> void:
 @rpc("authority", "call_local", "reliable")
 func process_join() -> void:
 	Helper.log(self, "Processing join")
-	ManagerLevel.load_level(ManagerLevel.LEVEL_LOBBY)
+	ManagerLevel.load_level(ManagerLevel.LEVEL_ONE)
 
 @rpc("authority", "call_local", "reliable")
 func load_menu(menu_path: String) -> void:

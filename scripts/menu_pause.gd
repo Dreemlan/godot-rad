@@ -6,6 +6,9 @@ func _ready() -> void:
 	#%QuitToLobby.pressed.connect(_on_quit_to_lobby_pressed)
 	%QuitToMain.pressed.connect(_on_quit_to_main_pressed)
 	
+	%MasterVolumeSlider.value_changed.connect(_on_master_vol_changed)
+	
+	_on_master_vol_changed(%MasterVolumeSlider.value)
 	_toggle_mouse_mode()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -28,3 +31,8 @@ func _on_quit_to_lobby_pressed() -> void:
 
 func _on_quit_to_main_pressed() -> void:
 	ManagerMenu.quit_to_main()
+
+func _on_master_vol_changed(value) -> void:
+	var bus := AudioServer.get_bus_index("Master")
+	var db := linear_to_db(value)
+	AudioServer.set_bus_volume_db(bus, db)

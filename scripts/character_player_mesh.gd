@@ -5,7 +5,7 @@ extends Node3D
 var follow_speed:float	= 10.0
 var turn_speed: float	= 10.0
 
-var pos_smooth_time : float = 0.08   # seconds
+var pos_smooth_time : float = 0.03   # seconds
 var rot_smooth_time : float = 0.06
 
 var target_basis: Basis

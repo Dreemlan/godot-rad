@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bohlvf6lxodee"
+path="res://.godot/imported/Confused and Angry Robots.mp3-b422d24517138138e9e344703a775363.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Confused and Angry Robots.mp3"
+dest_files=["res://.godot/imported/Confused and Angry Robots.mp3-b422d24517138138e9e344703a775363.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -76,6 +76,9 @@ func is_on_floor() -> bool:
 	else:
 		return true
 
+func set_camera_as_current() -> void:
+	%Camera3D.current = true
+
 @rpc("any_peer", "call_local", "reliable")
 func toggle_rpc(state: bool) -> void:
 	rpc_enabled = state
