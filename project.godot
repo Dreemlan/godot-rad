@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Helper="*res://scripts/helper.gd"
+ManagerConfig="*res://scripts/manager_config.gd"
 ManagerLevel="*res://scripts/manager_level.gd"
 ManagerPlayer="*res://scripts/manager_player.gd"
 ManagerMenu="*res://scripts/manager_menu.gd"
@@ -108,6 +109,7 @@ look_right={
 
 3d_physics/layer_1="World"
 3d_physics/layer_2="Player"
+3d_physics/layer_4="Weapon"
 
 [physics]
 

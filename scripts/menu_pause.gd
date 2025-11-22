@@ -7,8 +7,10 @@ func _ready() -> void:
 	%QuitToMain.pressed.connect(_on_quit_to_main_pressed)
 	
 	%MasterVolumeSlider.value_changed.connect(_on_master_vol_changed)
+	%MouseSensSlider.value_changed.connect(_on_mouse_sens_changed)
 	
 	_on_master_vol_changed(%MasterVolumeSlider.value)
+	_on_mouse_sens_changed(%MouseSensSlider.value)
 	_toggle_mouse_mode()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -36,3 +38,6 @@ func _on_master_vol_changed(value) -> void:
 	var bus := AudioServer.get_bus_index("Master")
 	var db := linear_to_db(value)
 	AudioServer.set_bus_volume_db(bus, db)
+
+func _on_mouse_sens_changed(value) -> void:
+	ManagerConfig.mouse_look_sensitivity = value

@@ -22,7 +22,7 @@ size = Vector3(0.6, 0.2, 0.2)
 
 [node name="Player" type="RigidBody3D" groups=["replicate"]]
 collision_layer = 2
-collision_mask = 7
+collision_mask = 15
 mass = 30.0
 physics_material_override = SubResource("PhysicsMaterial_mc5b1")
 can_sleep = false

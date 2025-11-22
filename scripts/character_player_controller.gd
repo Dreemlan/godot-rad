@@ -5,8 +5,6 @@ extends Node3D
 @onready var body = get_parent() as RigidBody3D
 
 # Look
-var joypad_look_sensitivity = 200.0
-var mouse_look_sensitivity = 3.0
 var mouse_look_delta: Vector2 = Vector2.ZERO
 var twist_input: float 			= 0.0
 var pitch_input: float			= 0.0
@@ -75,15 +73,15 @@ func _handle_jump() -> void:
 func _apply_camera_mouse(delta: float) -> void:
 	if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED: return
 	if not is_multiplayer_authority(): return
-	twist_input -= mouse_look_delta.x * mouse_look_sensitivity * delta
-	pitch_input -= mouse_look_delta.y * mouse_look_sensitivity * delta
+	twist_input -= mouse_look_delta.x * ManagerConfig.mouse_look_sensitivity * delta
+	pitch_input -= mouse_look_delta.y * ManagerConfig.mouse_look_sensitivity * delta
 	pitch_input = clamp(pitch_input, -85, 85)
 	basis = _quat_rotate(twist_input, pitch_input)
 
 func _apply_camera_joypad(delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	twist_input -= Focus.input_get_axis("look_left", "look_right") * joypad_look_sensitivity * delta
-	pitch_input -= Focus.input_get_axis("look_up", "look_down") * joypad_look_sensitivity * delta
+	twist_input -= Focus.input_get_axis("look_left", "look_right") * ManagerConfig.joypad_look_sensitivity * delta
+	pitch_input -= Focus.input_get_axis("look_up", "look_down") * ManagerConfig.joypad_look_sensitivity * delta
 	pitch_input = clamp(pitch_input, -85, 85)
 	basis = _quat_rotate(twist_input, pitch_input)
 

@@ -1,6 +1,6 @@
 extends Node
 
-const PORT: int = 42069
+const PORT: int = 25565
 const MAX_CLIENTS: int = 8
 
 func _ready() -> void:
@@ -24,6 +24,7 @@ func create_client(ip_address: String) -> void:
 	multiplayer.multiplayer_peer = peer
 	if not multiplayer.server_disconnected.is_connected(_on_server_disconnected):
 		multiplayer.server_disconnected.connect(_on_server_disconnected)
+	multiplayer.connection_failed.connect(ManagerMenu.quit_to_main)
 
 func shutdown_server() -> void:
 	Helper.log(self, "Shutting down server")
