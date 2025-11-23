@@ -3,15 +3,11 @@ extends Control
 func _ready() -> void:
 	Helper.log(self, "Ready")
 	
-	%DedicatedServer.pressed.connect(_on_dedicated_server)
 	%Host.pressed.connect(_on_host)
 	%Join.pressed.connect(_on_join)
 	
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnect)
-
-func _on_dedicated_server() -> void:
-	ManagerNetwork.create_server()
 
 func _on_host() -> void:
 	ManagerNetwork.create_server()
@@ -27,7 +23,6 @@ func _on_join() -> void:
 	
 	ManagerNetwork.create_client(%IPAddress.text)
 	hide()
-	#%LoadingScreen.show()
 
 func _on_connected_to_server() -> void:
 	if %DisplayName.text == "":

@@ -36,6 +36,7 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
@@ -68,14 +69,10 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Host"
 
-[node name="DedicatedServer" type="Button" parent="HBoxContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Dedicated Server [WIP]"
-
 [node name="ColorPicker" type="ColorPicker" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 edit_alpha = false
 edit_intensity = false
 picker_shape = 2
@@ -84,38 +81,3 @@ sampler_visible = false
 color_modes_visible = false
 hex_visible = false
 presets_visible = false
-
-[node name="LoadingScreen" type="Control" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="LoadingScreen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0.39215687, 0.5019608, 1)
-
-[node name="Label" type="Label" parent="LoadingScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -130.0
-offset_top = -11.5
-offset_right = 130.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Attempting to connect to server..."
-horizontal_alignment = 1

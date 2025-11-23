@@ -8,23 +8,24 @@ func _ready() -> void:
 
 func create_server() -> void:
 	var peer = ENetMultiplayerPeer.new()
-	var err = peer.create_server(PORT, MAX_CLIENTS)
-	if err != OK:
-		Helper.log(self, "Failed to start server: %s" % err)
-		return
+	peer.create_server(PORT, MAX_CLIENTS)
 	multiplayer.multiplayer_peer = peer
+	
 	if not multiplayer.peer_disconnected.is_connected(_on_peer_disconnected):
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+		
 	Helper.log(self, "Server started")
 
 func create_client(ip_address: String) -> void:
-	Helper.log(self, "Client started")
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_client(ip_address, PORT)
 	multiplayer.multiplayer_peer = peer
+	
 	if not multiplayer.server_disconnected.is_connected(_on_server_disconnected):
 		multiplayer.server_disconnected.connect(_on_server_disconnected)
 	multiplayer.connection_failed.connect(ManagerMenu.quit_to_main)
+	
+	Helper.log(self, "Client started")
 
 func shutdown_server() -> void:
 	Helper.log(self, "Shutting down server")
